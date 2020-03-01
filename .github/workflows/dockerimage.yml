@@ -1,0 +1,33 @@
+name: Run API Tests in Docker
+
+on: [push]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out test repo
+        uses: actions/checkout@v2
+        with:
+          repository: selident/basic-api-test
+          token: ${{ secrets.FAKE_PASS }}
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Build API test JAR package
+        run: mvn clean package -DskipTests
+
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag basic-api-test-image
+
+      - name: List all Docker image
+        run: docker images
+
+      - name: Execute API test suite inside docker
+        run: docker run basic-api-test-image
