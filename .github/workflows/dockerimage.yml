@@ -5,9 +5,8 @@ on: [push]
 jobs:
 
   build:
-
+    name: Run API Tests in Docker
     runs-on: ubuntu-latest
-
     steps:
       - name: Check out test repo
         uses: actions/checkout@v2
